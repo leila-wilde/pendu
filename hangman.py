@@ -6,7 +6,7 @@ def initiate():
     Selects randomly and returns a word
     within variable list_of_words inside words.py file
     """
-    print("Bienvenue au jeu du pendu !")
+    print("Bienvenue au jeu du pendu !\n")
     list_words = words.list_of_words
     nbWords = len(list_words)
     play_word = list_words[randrange(nbWords)]
@@ -22,7 +22,9 @@ def guessing(play_word):
     # we use a list to store letters that are part of the word to guess
     # initially, this is a list of "_" character
     tab_play_word = ["_"] * len_word
+    print("Mot à deviner :")
     print("".join(tab_play_word))
+    print()
 
     # integer to count number of false letters entered
     # if a false letter has already have been input, counter does not increase
@@ -32,11 +34,11 @@ def guessing(play_word):
     # games stops either after 7 errors, either when correct word is guessed
     while not finished and counter < 7 :
 
-
         erreur = True
 
         print("Lettres déjà jouées :")
         print(list_of_letters)
+        print()
         letter = input_letter()
         for id_letter in range(len_word) :
             if play_word[id_letter] == letter.lower() :
@@ -53,14 +55,15 @@ def guessing(play_word):
             # error counter is incremented only if a bad letter hasn't been used already
             if erreur :
                 counter += 1
-        print(f"compteur : {counter}")
+        print("Mot à deviner :")
         print("".join(tab_play_word))
+        print()
 
         if "_" not in "".join(tab_play_word):
-            print("gagné")
+            print("Félicitations, vous avez gagné !")
             finished = True
     
-    if counter == 8 :
+    if counter == 7 :
         print("Perdu !")
         print(f"Le mot à trouver était : {play_word}")
 
