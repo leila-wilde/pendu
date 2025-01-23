@@ -29,6 +29,41 @@ def menu():
         fenetre.blit(textSurface, textRect)
         y = y + 100
 
+def add_word():
+    name = ""
+    font = pygame.font.Font(None, 50)
+    running = True
+    while running:
+        texte = "Vous pourvez saisir le mot à ajouter : "
+        x = 360 / 2
+        texteSurface = font.render(texte, True, (255, 255, 255))
+        texteRect = texteSurface.get_rect()
+        texteRect.center = (x, 40)
+        for evt in pygame.event.get():
+            if evt.type == pygame.KEYDOWN:
+                if evt.unicode.isalpha():
+                    name += evt.unicode
+                elif evt.key == pygame.K_BACKSPACE:
+                    name = name[:-1]
+                elif evt.key == pygame.K_RETURN:
+                    name = f"\n{name.lower()}"
+                    with open("mots.txt", "a") as f:
+                        f.write(name)
+                    name = "Le mot est ajouté à la liste !"
+                    # espace pour retrouner au menu!!!!!
+                    running = False
+            elif evt.type == pygame.QUIT:
+                running = False
+        fenetre.fill((0, 0, 0))
+        block = font.render(name, True, (255, 255, 255))
+        rect = block.get_rect()
+        rect.center = fenetre.get_rect().center
+        fenetre.blit(texteSurface, texteRect)
+        fenetre.blit(block, rect)
+        pygame.display.flip()
+
+
+
 
 
 
@@ -56,6 +91,7 @@ background = ROSE
 # variables pour blit
 afficher_acceuil = message_acceuil()
 afficher_menu = 0
+afficher_add_word = 0
 
 
 continuer = 1
@@ -65,11 +101,21 @@ while continuer:
         if event.type == QUIT:
             continuer = 0
 
+
     key = pygame.key.get_pressed()
 
     if key[pygame.K_SPACE] == True:
         afficher_acceuil = 0
         afficher_menu = menu()
+
+    if key[pygame.K_a] == True:
+        afficher_menu = 0
+        afficher_add_word = add_word()
+    elif key[pygame.K_b] == True:
+        afficher_menu = 0
+        afficher_add_word = 0
+
+
 
 
     pygame.display.flip()
