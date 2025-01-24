@@ -6,22 +6,22 @@ import math
 pygame.init()
 
 # Constants
-WIDTH, HEIGHT = 2000, 1600
+WIDTH, HEIGHT = 2000, 1000
 BACKGROUND_COLOR = ('Pink')
 LETTERS_COLOUR = (0,0,0)
-LETTERS_SIZE = 120
+LETTERS_SIZE = 89
 FONT = "capth.ttf"
 MESSAGE_SIZE = 120  
 RADIUS_TOP = 1400  # Radius for the top arc
 RADIUS_BOTTOM = 1500  # Radius for the bottom arc
-CENTER_TOP = (WIDTH // 2, 2000)  # Center for the top arc
-CENTER_BOTTOM = (WIDTH // 2, 2300)  # Center for the bottom arc
+CENTER_TOP = (1300, 2000)  # Center for the top arc
+CENTER_BOTTOM = (1300, 2300)  # Center for the bottom arc
 HANGMAN_IMAGE = "hanged_man.jpg"
 MAX_INCORRECT_GUESSES = 7
 
 # Set up the display
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Hangman Game")
+pygame.display.set_caption("Pendu de l'au-de là")
 
 # Load fonts
 letters_font = pygame.font.Font(FONT, LETTERS_SIZE)
@@ -35,9 +35,9 @@ all_letters = letters_top + letters_bottom  # Combine both lists to simplify
 # Calculate positions for letters in a curved arc
 def get_curved_letter_positions(letters, center, radius):
     positions = []
-    angle_step = 70 / len(letters)  # Angle step between letters / steepness of arc
+    angle_step = 50 / len(letters)  # Angle step between letters / steepness of arc
     for i, letter in enumerate(letters):
-        angle = math.radians(122.5 - (i * angle_step))  # Adjust angle calculation for upward arch
+        angle = math.radians(113 - (i * angle_step))  # Adjust angle calculation for upward arch
         x = center[0] + radius * math.cos(angle)  # X position
         y = center[1] - radius * math.sin(angle)  # Y position
         positions.append((letter, (x, y)))
@@ -52,26 +52,26 @@ message = ""
 
 # Load the hangman image
 image = pygame.image.load(HANGMAN_IMAGE)
-image = pygame.transform.scale(image, (400, 700))  # Scale image
+image = pygame.transform.scale(image, (600, HEIGHT))  # Scale image
 
 # Function to display increasing segments of the hangman image with each incorrect guess
 def hangman_stage(incorrect_guesses):
-    segment_height = 700 // MAX_INCORRECT_GUESSES  # Height of each segment
+    segment_height = HEIGHT // MAX_INCORRECT_GUESSES  # Height of each segment 
 
     if incorrect_guesses < MAX_INCORRECT_GUESSES:
         # Calculate the height to display
         height_to_display = segment_height * (incorrect_guesses)
         # Create a surface to display the segment
-        segment_surface = pygame.Surface((400, height_to_display))
-        segment_surface.blit(image, (0, 0), (0, 0, 400, height_to_display))
-        screen.blit(segment_surface, (1600, 0))
+        segment_surface = pygame.Surface((600, height_to_display))
+        segment_surface.blit(image, (0, 0), (0, 0, 600, height_to_display))
+        screen.blit(segment_surface, (0, 0))
     else:
         # Display the whole image
-        screen.blit(image, (1600, 0))
+        screen.blit(image, (0, 0))
         # Display game over message
         font = pygame.font.Font('outlaw.ttf', 100) # Create a font object
         game_over_text = font.render("Game Over", True, (255, 0, 0)) # Render the text
-        text_rect = game_over_text.get_rect(center=(1800, 350)) # Position text
+        text_rect = game_over_text.get_rect(center=(300, HEIGHT * 0.5)) # Position text
         screen.blit(game_over_text, text_rect) # Display the text
 
 # Main loop
@@ -96,7 +96,6 @@ while running:
             if event.key == pygame.K_SPACE:  # Simulate the player's incorrect guesses
                 if incorrect_guesses < MAX_INCORRECT_GUESSES:
                     incorrect_guesses += 1  # Increment incorrect guesses
-                
 
     # Fill the background
     screen.fill(BACKGROUND_COLOR)
@@ -110,7 +109,7 @@ while running:
     # Draw the top message
     if message:
         message_surface = message_font.render(message, True, LETTERS_COLOUR)
-        message_rect = message_surface.get_rect(center=(WIDTH // 2, 100))  # Position message at the top
+        message_rect = message_surface.get_rect(center=(1300, 100))
         screen.blit(message_surface, message_rect)
     
     # Display the appropriate segment of the image
