@@ -119,6 +119,20 @@ def read_score():
     except Exception :
         print("Error while reading")
 
+def reset_score():
+    try :
+        score = dict()
+        with open("./score.json", "w") as file:
+            json.dump(score, file)
+
+    except ( IOError, OverflowError) as error :
+        print("Error while writing")
+    except (IsADirectoryError, FileNotFoundError, NameError, OSError, PermissionError) as error :
+            print("Error with file or OS error")
+    except (UnicodeDecodeError, UnicodeEncodeError) as error :
+        print("Error with encoding or decoding")
+    except Exception :
+        print("Error while writing")
 
 def main():
 
@@ -129,7 +143,6 @@ def main():
     print()
 
     play_word = initiate()
-
 
     score = guessing(play_word)
 
