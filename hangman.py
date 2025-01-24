@@ -1,17 +1,17 @@
 import words
+import json
 from random import randrange
+
 
 def initiate():
     """
     Selects randomly and returns a word
     within variable list_of_words inside words.py file
     """
-    print("Bienvenue au jeu du pendu !\n")
     list_words = words.list_of_words
     nbWords = len(list_words)
     play_word = list_words[randrange(nbWords)]
     return play_word
-
 
 def guessing(play_word):
     # we keep record of letters already played so we display this in order to help players
@@ -38,6 +38,7 @@ def guessing(play_word):
 
         print("Lettres déjà jouées :")
         print(list_of_letters)
+        print(f"Nombre de chances restantes : {7 - counter}")
         print()
         letter = input_letter()
         for id_letter in range(len_word) :
@@ -60,12 +61,11 @@ def guessing(play_word):
         print()
 
         if "_" not in "".join(tab_play_word):
-            print("Félicitations, vous avez gagné !")
             finished = True
+            return True
     
     if counter == 7 :
-        print("Perdu !")
-        print(f"Le mot à trouver était : {play_word}")
+        return False
 
 def input_letter():
     """
@@ -83,10 +83,62 @@ def input_letter():
     return letter
 
 
-# créér un fichier score
+def write_score(score):
+
+    try :
+        with open("./score.json", "w") as file:
+            json.dump(score, file)
+
+    except ( IOError, OverflowError) as error :
+        print("Error while writing")
+    except (IsADirectoryError, FileNotFoundError, NameError, OSError, PermissionError) as error :
+            print("Error with file or OS error")
+    except (UnicodeDecodeError, UnicodeEncodeError) as error :
+        print("Error with encoding or decoding")
+    except Exception :
+        print("Error while writing")
+
+
+def read_score():
+    try :
+        with open("./score.json", "r") as file :
+            score = json.load(file)
+            return score
+
+    except ( IOError, OverflowError) as error :
+        print("Error while writing")
+
+    except (IsADirectoryError, FileNotFoundError, NameError, OSError, PermissionError) as error :
+            print("Error with file or OS error")
+    
+    except (UnicodeDecodeError, UnicodeEncodeError) as error :
+        print("Error with encoding or decoding")
+
+    except Exception :
+        print("Error while reading")
+
 
 def main():
+
+    print("Bienvenue au jeu du pendu !\n")
+    score_players = read_score()
+    print("Entrez votre nom :")
+    player_name = input()
+    print()
+
     play_word = initiate()
-    guessing(play_word)
+
+    if guessing(play_word):
+        print("Félicitations, vous avez gagné !")
+
+        if player_name in score_players.keys():
+            score_players[player_name] += 10
+        else :
+            score_players[player_name] = 10
+        write_score(score_players)
+
+    else :
+        print("Perdu !")
+        print(f"Le mot à trouver était : {play_word}")
 
 main()
