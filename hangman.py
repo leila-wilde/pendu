@@ -18,6 +18,7 @@ def guessing(play_word):
     # list of letters used by player. Initially empty
     list_of_letters = []
     len_word = len(play_word)
+    score = 80
 
     # we use a list to store letters that are part of the word to guess
     # initially, this is a list of "_" character
@@ -56,16 +57,17 @@ def guessing(play_word):
             # error counter is incremented only if a bad letter hasn't been used already
             if erreur :
                 counter += 1
+                score -= 10
         print("Mot à deviner :")
         print("".join(tab_play_word))
         print()
 
         if "_" not in "".join(tab_play_word):
             finished = True
-            return True
+            return score
     
     if counter == 7 :
-        return False
+        return 0
 
 def input_letter():
     """
@@ -128,13 +130,17 @@ def main():
 
     play_word = initiate()
 
-    if guessing(play_word):
+
+    score = guessing(play_word)
+
+    if score > 0 :
         print("Félicitations, vous avez gagné !")
+        print(f"votre score : {score}")
 
         if player_name in score_players.keys():
-            score_players[player_name] += 10
+            score_players[player_name] += score
         else :
-            score_players[player_name] = 10
+            score_players[player_name] = score
         write_score(score_players)
 
     else :
