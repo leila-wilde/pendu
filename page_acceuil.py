@@ -36,6 +36,7 @@ def menu_page():
 
 def add_word_page():
     font = pygame.font.Font('carnevalee_freakshow.ttf', 50)
+    color = pygame.Color(255,192,203)
 
     input_box = pygame.Rect(100, 150, 800, 100)
     word = ""
@@ -69,25 +70,16 @@ def add_word_page():
 
         screen.fill((BLACK))
         wordSurface = font.render(word, True, (WHITE))
-        # wordRect = wordSurface.get_rect()
-        # wordRect.center = screen.get_rect().center
-
         screen.blit(wordSurface, (input_box.x+25, input_box.y+10))
         screen.blit(textSurface, textRect)
-        # screen.blit(block, rect)
+        pygame.draw.rect(screen, color, input_box, 2)
         pygame.display.flip()
 
-# def play_game():
+def play_game():
 
 
 
-def botton(text, color, x, y, width, height):
-    font = pygame.font.Font('carnevalee_freakshow.ttf', 50)
-    rect = pygame.Rect(x, y, width, height)
-    text_button = font.render(text, True, color)
-    # text_button_rect = text_button.get_rect()
-    # text_button_rect.center = rect.center
-    pygame.draw.rect(screen, )
+
     
 
 
